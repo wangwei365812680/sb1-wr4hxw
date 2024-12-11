@@ -4,6 +4,12 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+    base:'./',
+  resolve: {
+    alias: {
+      '@': '/src', // 假设你的源代码在src目录下
+    },
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
   },

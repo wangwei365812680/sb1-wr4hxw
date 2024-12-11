@@ -1,11 +1,31 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import { Carousel } from '../components/Carousel';
 import { ProductCard } from '../components/ProductCard';
 import { CategoryCard } from '../components/CategoryCard';
 import { FEATURED_PRODUCTS } from '../data/products';
 import { FEATURED_CATEGORIES } from '../data/categories';
 
+import {getBannerList} from '@/api'
+
 export const Home: React.FC = () => {
+
+  const [list,useList] = useState([])
+
+  const [bestsellerList,useBestsellerList] = useState([])
+  
+
+  useEffect(  ()=>{
+    const res = getBannerList().then(res=>{
+    
+      useList(res.selected_categories.content) 
+
+      useBestsellerList(res.bestseller.content) 
+  
+      console.log(21134,res.bestseller.content)
+    })
+
+   },[])
+
   return (
     <div>
       <Carousel />
@@ -13,8 +33,8 @@ export const Home: React.FC = () => {
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">精选分类</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {FEATURED_CATEGORIES.map((category) => (
-              <CategoryCard key={category.id} category={category} />
+            {list.map((item,index) => (
+              <CategoryCard key={index} category={item} />
             ))}
           </div>
         </section>
@@ -22,8 +42,8 @@ export const Home: React.FC = () => {
         <section>
           <h2 className="text-2xl font-bold mb-6">精选商品</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURED_PRODUCTS.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {bestsellerList.map((item,index) => (
+              <ProductCard key={item.id} product={item} />
             ))}
           </div>
         </section>

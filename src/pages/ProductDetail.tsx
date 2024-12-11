@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Heart, Share2, ChevronRight } from 'lucide-react';
 import { FEATURED_PRODUCTS } from '../data/products';
@@ -8,6 +8,8 @@ import { ProductSpecs } from '../components/ProductSpecs';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { Cart } from '../components/Cart';
+
+import { getCommodityDetaile } from '@/api'
 
 export const ProductDetail: React.FC = () => {
   const { productId } = useParams();
@@ -19,17 +21,40 @@ export const ProductDetail: React.FC = () => {
   const { user } = useAuthStore();
   const navigate = useNavigate();
   
-  const product = FEATURED_PRODUCTS.find(p => p.id === productId);
+  let product =   {
+    id: '1',
+    name: '智能手表 Pro',
+    price: 1299,
+    image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=800',
+    description: '多功能智能手表，支持心率监测、运动追踪',
+    category: 'electronics',
+    subcategory: '智能手表',
+    specs: {
+      colors: [
+        { id: 'black', name: '深空黑', image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12' },
+        { id: 'silver', name: '流光银', image: 'https://images.unsplash.com/photo-1539185441755-769473a23570' },
+        { id: 'gold', name: '玫瑰金', image: 'https://images.unsplash.com/photo-1434493907317-a46b5bbe7834' }
+      ],
+      sizes: [
+        { id: '40mm', name: '40mm' },
+        { id: '44mm', name: '44mm' }
+      ]
+    },
+    stock: 100
+  }
+
+
+  const [productObj,setProductObj] =useState(product.specs.colors)
   
   if (!product) {
     return <div className="text-center py-12">商品未找到</div>;
   }
 
-  const productImages = [
-    product.image,
-    'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800',
-    'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
-  ];
+  // const productImages = [
+  //   product.image,
+  //   'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800',
+  //   'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
+  // ];
 
   const detailImages = [
     'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&q=80&w=1600',
@@ -85,6 +110,22 @@ export const ProductDetail: React.FC = () => {
       quantity
     });
   };
+  const [productImages,setProductImages] = useState([])
+
+
+  useEffect(()=>{
+
+
+    // console.log(111)
+    getCommodityDetaile({id:productId}).then(res=>{
+      console.log(1788,res.product,res.images)
+
+      setProductImages(res.product.images)
+
+      setProductObj(res.product)
+            // setProduct(res.data)
+    })
+  },[])
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -93,7 +134,7 @@ export const ProductDetail: React.FC = () => {
         <div className="lg:w-1/2">
           <div className="relative">
             <img
-              src={productImages[selectedImage]}
+              src={productImages[selectedImage]?.popup}
               alt={product.name}
               className="w-full aspect-square object-cover rounded-lg"
             />
@@ -119,7 +160,7 @@ export const ProductDetail: React.FC = () => {
                 }`}
               >
                 <img
-                  src={image}
+                  src={image?.thumb}
                   alt={`${product.name} ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
@@ -147,7 +188,7 @@ export const ProductDetail: React.FC = () => {
             <div className="space-y-6">
               {/* 商品规格 */}
               <ProductSpecs
-                colors={product.specs.colors}
+                colors={productObj.sameSpuIdProduct}
                 sizes={product.specs.sizes}
                 selectedColor={selectedColor}
                 selectedSize={selectedSize}
