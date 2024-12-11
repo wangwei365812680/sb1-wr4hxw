@@ -1,8 +1,10 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { FEATURED_PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
+
+import {getCommoditySearchList} from '@/api'
 
 export const SearchResults: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -29,16 +31,30 @@ export const SearchResults: React.FC = () => {
   });
 
   // 根据价格范围和分类筛选结果
-  const filteredResults = sortedResults.filter(product => {
-    const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
-    return matchesPrice && matchesCategory;
-  });
+  // const filteredResults = sortedResults.filter(product => {
+  //   const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+  //   const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+  //   return matchesPrice && matchesCategory;
+  // });
+
+  const [filteredResults,setList] = useState([])
+
+  useEffect(()=>{
+
+    // 发送搜索请求
+
+    getCommoditySearchList({
+      keyword:query,
+    }).then(res=>{
+        console.log(43,res.products)
+        setList(res.products.data)
+    })
+  },[])
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* 搜索框 */}
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <div className="relative max-w-xl mx-auto">
           <input
             type="text"
@@ -48,7 +64,7 @@ export const SearchResults: React.FC = () => {
           />
           <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
         </div>
-      </div>
+      </div> */}
 
       <div className="flex gap-8">
         {/* 筛选侧边栏 */}

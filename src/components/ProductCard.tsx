@@ -23,7 +23,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         />
         <div className="p-4">
           <h3 className="text-lg font-medium">{product.name}</h3>
-          <p className="text-gray-600 mt-1">${111}</p>
+          <p className="text-gray-600 mt-1">${product.price_format}</p>
         </div>
       </div>
     </Link>

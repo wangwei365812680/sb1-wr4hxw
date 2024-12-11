@@ -53,9 +53,9 @@ export const Navigation: React.FC = () => {
         <ul className="flex space-x-8">
           {list.map((item) => (
             <li
-              key={item.parent_cate.link}
+              key={item.parent_cate.name}
               className="relative group"
-              onMouseEnter={() => setActiveCategory(item&&item.list)}
+              onMouseEnter={() => setActiveCategory(item&&item.parent_cate)}
               onMouseLeave={() => setActiveCategory(null)}
             >
               <Link
@@ -65,7 +65,7 @@ export const Navigation: React.FC = () => {
                 {item.parent_cate.name}
                 <ChevronDown className="ml-1 h-4 w-4" />
               </Link>
-              {activeCategory === item.list && (
+              {activeCategory === item.parent_cate && (
                 <div className="absolute left-0 top-full w-48 bg-white border border-gray-200 shadow-lg rounded-md py-2 z-50">
                   {item.list.map((item2) => (
                     <Link

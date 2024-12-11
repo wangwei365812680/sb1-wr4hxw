@@ -54,3 +54,14 @@ export const getCarList = (data)=>{
   
       })
   }
+
+  export const getCommoditySearchList = (data)=>{
+      return request({
+            method:'get',
+            url:`/products/searchForApi`, 
+            params:data
+  
+      })
+  }
+
+ 

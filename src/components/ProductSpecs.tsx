@@ -24,7 +24,7 @@ export const ProductSpecs: React.FC<ProductSpecsProps> = ({
       <div>
         <h3 className="text-sm font-medium text-gray-700 mb-3">选择颜色</h3>
         <div className="flex flex-wrap gap-3">
-          {colors.length>0&&colors.map((color) => (
+          {colors&&colors.map((color) => (
             <button
               key={color.id}
               onClick={() => onColorChange(color.id)}
@@ -53,7 +53,7 @@ export const ProductSpecs: React.FC<ProductSpecsProps> = ({
       <div>
         <h3 className="text-sm font-medium text-gray-700 mb-3">选择尺码</h3>
         <div className="flex flex-wrap gap-3">
-          {sizes.length>0&&sizes.map((size) => (
+          {sizes&&sizes.map((size) => (
             <button
               key={size.id}
               onClick={() => onSizeChange(size.id)}

@@ -44,7 +44,7 @@ export const ProductDetail: React.FC = () => {
   }
 
 
-  const [productObj,setProductObj] =useState(product.specs.colors)
+  const [productObj,setProductObj] =useState([])
   
   if (!product) {
     return <div className="text-center py-12">商品未找到</div>;
@@ -112,6 +112,8 @@ export const ProductDetail: React.FC = () => {
   };
   const [productImages,setProductImages] = useState([])
 
+  const [sameSpuIdProduct,setSameSpuIdProduct] = useState([])
+
 
   useEffect(()=>{
 
@@ -122,10 +124,20 @@ export const ProductDetail: React.FC = () => {
 
       setProductImages(res.product.images)
 
-      setProductObj(res.product)
+      //setProductObj(res.product)
+
+      setSameSpuIdProduct(res.product.sameSpuIdProduct)
             // setProduct(res.data)
     })
   },[])
+
+  const onColorChange=(e)=>{
+
+    const res = sameSpuIdProduct.filter((item)=>item.id === e)
+
+    setSameSpuIdProduct(res)
+    console.log(123,res)
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -172,9 +184,9 @@ export const ProductDetail: React.FC = () => {
         {/* 右侧商品信息 */}
         <div className="lg:w-1/2">
           <div className="bg-white p-6 rounded-lg border border-gray-200">
-            <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
+            <h1 className="text-2xl font-bold mb-4">{sameSpuIdProduct[0]?.name}</h1>
             <div className="flex items-center justify-between mb-6">
-              <div className="text-3xl font-bold text-red-600">¥{product.price.toFixed(2)}</div>
+              <div className="text-3xl font-bold text-red-600">¥{sameSpuIdProduct[0]?.price_format}</div>
               <div className="flex gap-4">
                 <button className="p-2 hover:bg-gray-100 rounded-full">
                   <Heart className="w-6 h-6" />
@@ -188,11 +200,11 @@ export const ProductDetail: React.FC = () => {
             <div className="space-y-6">
               {/* 商品规格 */}
               <ProductSpecs
-                colors={productObj.sameSpuIdProduct}
+                colors={sameSpuIdProduct}
                 sizes={product.specs.sizes}
                 selectedColor={selectedColor}
                 selectedSize={selectedSize}
-                onColorChange={setSelectedColor}
+                onColorChange={onColorChange}
                 onSizeChange={setSelectedSize}
               />
 
